@@ -21,8 +21,8 @@ var services = map[int]string{
 	993:  "IMAPS",
 }
 
-func scan(host string, port int, wg *sync.WaitGroup) {
-	defer wg.Done()
+func scan(host string, port int) {
+
 	address := fmt.Sprintf("%s:%d", host, port)
 
 	conn, err := net.DialTimeout("tcp", address, time.Second)
@@ -32,13 +32,21 @@ func scan(host string, port int, wg *sync.WaitGroup) {
 	conn.Close()
 
 	if services[port] == "" {
-		fmt.Printf("port %d open !service not found! see:https://www.iana.org/assignments/service-names-port-numbers", port)
+		fmt.Printf("port %d open !service not found! see:https://www.iana.org/assignments/service-names-port-numbers\n", port)
 	} else {
 		fmt.Printf("port %d open with service %s\n", port, services[port])
 	}
 }
 
+func worker(host string, porte chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for porta := range porte {
+		scan(host, porta)
+	}
+}
+
 func main() {
+	porte := make(chan int)
 	host := flag.String("host", "localhost", "host to scan")
 	start := flag.Int("start", 1, "start of range") //1 by default
 	end := flag.Int("end", 1, "end of range")
@@ -53,11 +61,15 @@ func main() {
 		*start = 1
 		*end = 65535
 	}
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go worker(*host, porte, &wg)
+	}
 
 	for ports := *start; ports <= *end; ports++ {
-		wg.Add(1)
-		go scan(*host, ports, &wg)
+		porte <- ports
 	}
+	close(porte) //dice ai worker basta lavorare
 	wg.Wait()
 	fmt.Println("finished")
 
