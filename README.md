@@ -86,10 +86,9 @@ For each port in the range, the scanner launches a goroutine that attempts a TCP
 ## Roadmap
 
 - [x] Bounded concurrency (worker pool with channels) for reliable full-range scans without hitting the OS socket limit
-- [ ] gestion of error
-- [ ] Banner grabbing to read service versions (e.g. `OpenSSH 8.2`)
+- [x] Banner grabbing to read service versions (e.g. `OpenSSH 8.2`)
 - [ ] Save results to a file
-- [ ] Larger service map, optionally loaded from the official [IANA registry](https://www.iana.org/assignments/service-names-port-numbers)
+- [x] Larger service map, optionally loaded from the official [IANA registry](https://www.iana.org/assignments/service-names-port-numbers)
 
 ## Disclaimer
 
