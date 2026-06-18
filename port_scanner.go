@@ -18,6 +18,7 @@ var services = map[int]string{
 	80:   "HTTP",
 	443:  "HTTPS",
 	3306: "MySQL",
+	993:  "IMAPS",
 }
 
 func scan(host string, port int, wg *sync.WaitGroup) {
@@ -42,15 +43,20 @@ func main() {
 	start := flag.Int("start", 1, "start of range") //1 by default
 	end := flag.Int("end", 1, "end of range")
 	all := flag.Bool("all", false, "scan all 65535 ports")
+	port := flag.Int("port", 0, "scan a single port")
+
 	flag.Parse()
-	if *all {
+	if *port != 0 {
+		*start = *port
+		*end = *port
+	} else if *all {
 		*start = 1
 		*end = 65535
 	}
 
-	for port := *start; port <= *end; port++ {
+	for ports := *start; ports <= *end; ports++ {
 		wg.Add(1)
-		go scan(*host, port, &wg)
+		go scan(*host, ports, &wg)
 	}
 	wg.Wait()
 	fmt.Println("finished")
