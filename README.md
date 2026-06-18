@@ -10,6 +10,7 @@ Built as a learning project to practice Go fundamentals: the `flag` package, the
 - **Custom port range** — choose exactly which ports to scan with `-start` and `-end`.
 - **Full scan** — `-all` scans every port from 1 to 65535.
 - **Service detection** — recognises common services (HTTP, SSH, HTTPS, FTP, DNS, MySQL, and more) from a built-in port map.
+- **Scan one port** — with `-scan` you can scan ony one port
 
 ## Requirements
 
@@ -35,6 +36,7 @@ This produces a standalone binary (`port_scanner` on Linux/macOS, `port_scanner.
 | `-start`  | int     | `1`         | First port of the range             |
 | `-end`    | int     | `1`         | Last port of the range              |
 | `-all`    | bool    | `false`     | Scan all ports (1–65535)            |
+| `-port`    | int    | `0`     | Scan ony one port           |
 
 ### Examples
 
@@ -61,13 +63,18 @@ You can also run it directly without building:
 ```bash
 go run port_scanner.go -host scanme.nmap.org -start 1 -end 1024
 ```
+Scan one single port
+
+```bash
+go run port_scanner.go -host scanme.nmap.org -port 80
+```
 
 ### Sample output
 
 ```
-porta 22 aperta con il servizio SSH
-porta 80 aperta con il servizio HTTP
-finito
+port 22 open whit service SSH
+port 80 open whit service HTTP
+finish
 ```
 
 Because the scan runs concurrently, open ports may appear in any order — whichever responds first.
