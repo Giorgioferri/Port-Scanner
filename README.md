@@ -37,6 +37,7 @@ This produces a standalone binary (`port_scanner` on Linux/macOS, `port_scanner.
 | `-end`    | int     | `1`         | Last port of the range              |
 | `-all`    | bool    | `false`     | Scan all ports (1–65535)            |
 | `-port`    | int    | `0`     | Scan ony one port           |
+| `-sV`    | bool    | `false`     | Show version           |
 
 ### Examples
 
